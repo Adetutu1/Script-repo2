@@ -9,7 +9,7 @@ def filter_pains(compound_smiles):
     mol = Chem.MolFromSmiles(compound_smiles)
     if mol is None:
         return False  # Skip invalid compounds
-    
+
     pains_patterns = [
         '[O;X2]~[CX3](=[OX1])[!O,N,S]',
         'C=C-C(=O)-N',
@@ -269,11 +269,11 @@ def filter_pains(compound_smiles):
         'CC(=[OX1,SX1,NH])[SX2][*,#1]'
         # Add more PAINS patterns here...
     ]
-    
+
     for pattern in pains_patterns:
         if mol.HasSubstructMatch(Chem.MolFromSmarts(pattern)):
             return True  # Compound matches a PAINS pattern
-    
+
     return False  # Compound does not match any PAINS pattern
 
 # Load input CSV file
