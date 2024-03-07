@@ -1,3 +1,5 @@
+#filter based on GSK reported PAINS structure, this script is particularly useful to molecule name, SMILES in separate column of a csv file. The output will create another column for true/false PAINS compounds.
+
 !pip install pandas
 import pandas as pd
 !pip install deepchem
