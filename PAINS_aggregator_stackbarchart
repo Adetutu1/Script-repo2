@@ -1,0 +1,41 @@
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+
+# Create the dataset
+data <- data.frame(
+  ZINC_ID = c(
+    "ZINC000012631773", "ZINC000015064829", "ZINC000065576673", "ZINC000069455523",
+    "ZINC000095367244", "ZINC000095428225", "ZINC000095445130", "ZINC000095509829",
+    "ZINC000097059791", "ZINC000223724779", "ZINC000244659589", "ZINC000244678684",
+    "ZINC000299778567", "ZINC000299781254", "ZINC000426613632", "ZINC000685942933",
+    "ZINC000711076070", "ZINC001506401644"
+  ),
+  IsPains = c(
+    "Pass", "Pass", "Pass", "Pass", "Pass", "Pass", "Pass", "Pass", 
+    "Pass", "Pass", "Pass", "Pass", "Pass", "Pass", "Fail", "Pass", 
+    "Fail", "Pass"
+  ),
+  aggregator = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0)
+)
+
+# Summarize the data
+summary_data <- data %>%
+  group_by(IsPains, aggregator) %>%
+  summarise(Count = n(), .groups = 'drop')
+
+# Convert aggregator to a factor
+summary_data$aggregator <- factor(summary_data$aggregator, 
+                                  levels = c(0, 1),
+                                  labels = c("Non-Aggregator (0)", "Aggregator (1)"))
+
+# Create the stacked bar chart
+ggplot(summary_data, aes(x = IsPains, y = Count, fill = aggregator)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = c("Non-Aggregator (0)" = "purple", "Aggregator (1)" = "orange"),
+                    name = "Aggregator Status") +
+  scale_y_continuous(breaks = seq(0, 20, by = 2)) +  # Set y-axis scale to steps of 2
+  labs(title = "IsPains and Aggregator Status",
+       x = "PAINS Status",
+       y = "Count") +
+  theme_minimal()
